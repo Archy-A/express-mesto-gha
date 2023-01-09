@@ -1,24 +1,53 @@
 const Card = require('../models/card');
+const Constants = require('../utils/constants');
 
 exports.getCards = (req, res) => {
   Card.find({})
-  .then(cards => res.send({ data: cards }))
-  .catch(err => res.status(500).send({ message: 'Произошла ошибка получения карточек' }));
+  .then(cards => res.send(cards))
+  .catch((err) => {
+    res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
+  })
 };
 
 exports.createCard = (req, res) => {
   const owner = req.user._id
   const { name, link } = req.body;
   Card.create({ name, link, owner })
-    .then(card => res.send({ data: card }))
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка создания карточки' }));
-};
+  .then((card) => {
+      res.send(({
+        name : card.name,
+        link : card.link,
+        owner : card.owner,
+        _id : card._id,
+      }))
+  })
+  .catch((err) => {
+      res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
+    });
+  }
 
 exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
-  .then(card => res.send({ data: card }))
-  .catch(err => res.status(500).send({ message: 'Произошла ошибка при удалении карточки' }));
-};
+  .then((card) => {
+    if (card) {
+      res.send(({
+        name : card.name,
+        link : card.link,
+        owner : card.owner,
+        _id : card._id,
+      }))
+    } else {
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
+    }
+  })
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
+    } else {
+      res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
+    }
+    });
+  }
 
 exports.likeCard = (req, res) => {
   const owner = req.user._id;
@@ -27,9 +56,26 @@ exports.likeCard = (req, res) => {
   { $addToSet: { likes: owner } },
   { new: true },
   )
-  .then(card => res.send({ data: card }))
-  .catch(err => res.status(500).send({ message: 'Произошла ошибка поставить лайк' }));
-};
+  .then((card) => {
+    if (card) {
+      res.send(({
+        name : card.name,
+        link : card.link,
+        owner : card.owner,
+        _id : card._id,
+       }))
+    } else {
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
+    }
+  })
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
+    } else {
+      res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
+    }
+    });
+  }
 
 exports.dislikeCard = (req, res) => {
   const owner = req.user._id;
@@ -38,6 +84,23 @@ exports.dislikeCard = (req, res) => {
   { $pull: { likes: owner } },
   { new: true },
   )
-  .then(card => res.send({ data: card }))
-  .catch(err => res.status(500).send({ message: 'Произошла ошибка удалить лайк' }));
-};
+  .then((card) => {
+    if (card) {
+      res.send(({
+        name : card.name,
+        link : card.link,
+        owner : card.owner,
+        _id : card._id,
+      }))
+    } else {
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
+    }
+  })
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
+    } else {
+      res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
+    }
+    });
+  }
