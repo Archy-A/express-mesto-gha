@@ -77,13 +77,13 @@ exports.updateUser = (req, res) => {
         _id : user._id,
       }))
     } else {
-      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден111' });
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден' });
     }
   })
   .catch((err) => {
     console.log('err =', err)
     if (err.name === 'CastError') {
-      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден222' });
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден' });
     }
       else if (err.name === 'ValidationError') {
       res.status(Constants.HTTP_BAD_REQUEST).send({ message: 'переданы некорректные данные в метод обновления профиля' });

@@ -22,7 +22,11 @@ exports.createCard = (req, res) => {
       }))
   })
   .catch((err) => {
+    if (err.name === 'ValidationError') {
+      res.status(Constants.HTTP_BAD_REQUEST).send({ message: 'переданы некорректные данные в метод создания карточки' });
+    } else {
       res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
+    }
     });
   }
 
