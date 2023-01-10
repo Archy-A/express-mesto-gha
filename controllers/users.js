@@ -12,6 +12,7 @@ exports.getUser = (req, res) => {
       })))
       .catch((err) => {
         if (err.name === 'CastError') {
+          console.log(Constants.HTTP_NOT_FOUND)
           res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден' });
         } else {
           res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
