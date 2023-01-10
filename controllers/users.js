@@ -16,6 +16,9 @@ exports.getUser = (req, res) => {
 
         if (err.name === 'TypeError') {
           res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден' });
+        }
+        else if (err.name === 'CastError') {
+            res.status(Constants.HTTP_BAD_REQUEST).send({ message: 'переданы некорректные данные в метод пользователя' });
         } else {
           res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере1111' });
         }
@@ -52,14 +55,12 @@ exports.createUser = (req, res) => {
   }
 
 exports.updateUser = (req, res) => {
-  const { name, about } = req.body;
+  const { name, about, avatar } = req.body;
   User.findByIdAndUpdate(
   req.params.id,
-  { name, about },
+  { name, about, avatar },
   {
       new: true,
-      runValidators: true,
-      upsert: true
   }
   )
   .then((user) => {
@@ -95,7 +96,7 @@ exports.updateAvaUser = (req, res) => {
   {
       new: true,
       runValidators: true,
-      upsert: true
+      upsert: false
   }
   )
   .then((user) => {
