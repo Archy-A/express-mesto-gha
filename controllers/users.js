@@ -2,7 +2,7 @@ const User = require('../models/user');
 const Constants = require('../utils/constants');
 
 exports.getUser = (req, res) => {
-    User.findById(req.params.id)
+    User.findById(req.params.id.trim())
       .then((user) =>
        res.send(({
         name : user.name,
@@ -11,8 +11,10 @@ exports.getUser = (req, res) => {
         _id : user._id,
       })))
       .catch((err) => {
-        if (err.name === 'CastError') {
-          console.log(Constants.HTTP_NOT_FOUND)
+
+        console.log('err = ', err)
+
+        if (err.name === 'TypeError') {
           res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден' });
         } else {
           res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере1111' });
