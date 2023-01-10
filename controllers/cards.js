@@ -74,8 +74,9 @@ exports.likeCard = (req, res) => {
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
-    } else {
+      res.status(Constants.HTTP_BAD_REQUEST).send({ message: 'переданы некорректные данные в метод лайка карточки' });
+    }
+    else {
       res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
     }
     });
