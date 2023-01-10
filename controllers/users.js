@@ -64,6 +64,8 @@ exports.updateUser = (req, res) => {
   { name, about, avatar },
   {
       new: true,
+      runValidators: true,
+      upsert: true
   }
   )
   .then((user) => {
