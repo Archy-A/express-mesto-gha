@@ -56,8 +56,11 @@ exports.createUser = (req, res) => {
 
 exports.updateUser = (req, res) => {
   const { name, about, avatar } = req.body;
+  const me = req.user._id.trim()
+  console.log('req.body =', req.body)
+
   User.findByIdAndUpdate(
-  req.params.id,
+  me,
   { name, about, avatar },
   {
       new: true,
@@ -72,12 +75,13 @@ exports.updateUser = (req, res) => {
         _id : user._id,
       }))
     } else {
-      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден' });
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден111' });
     }
   })
   .catch((err) => {
+    console.log('err =', err)
     if (err.name === 'CastError') {
-      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден' });
+      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден222' });
     }
       else if (err.name === 'ValidationError') {
       res.status(Constants.HTTP_BAD_REQUEST).send({ message: 'переданы некорректные данные в метод обновления профиля' });
@@ -88,7 +92,7 @@ exports.updateUser = (req, res) => {
 }
 
 exports.updateAvaUser = (req, res) => {
-  const me = req.user._id
+  const me = req.user._id.trim()
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     me,
