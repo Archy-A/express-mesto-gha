@@ -23,6 +23,10 @@ const usersRouter = require("./routes/users");
 app.use("/", usersRouter);
 const cardsRouter = require("./routes/cards");
 app.use("/", cardsRouter);
+const unexistRouter = require("./routes/unexist");
+app.use("/", unexistRouter);
+
+
 
 // app.use(express.static(path.join(__dirname, 'public')));
 

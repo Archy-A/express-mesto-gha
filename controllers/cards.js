@@ -45,13 +45,18 @@ exports.deleteCard = (req, res) => {
     }
   })
   .catch((err) => {
+    console.log('err =', err)
     if (err.name === 'CastError') {
       res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
+    }
+      else if (err.name === 'ValidationError') {
+      res.status(Constants.HTTP_BAD_REQUEST).send({ message: 'переданы некорректные данные в метод удаления карточки' });
     } else {
       res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
     }
     });
   }
+
 
 exports.likeCard = (req, res) => {
   const owner = req.user._id;
@@ -103,7 +108,7 @@ exports.dislikeCard = (req, res) => {
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      res.status(Constants.HTTP_NOT_FOUND).send({ message: 'карточка не найдена' });
+      res.status(Constants.HTTP_BAD_REQUEST).send({ message: 'переданы некорректные данные в метод дизлайка карточки' });
     } else {
       res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
     }
