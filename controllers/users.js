@@ -15,7 +15,7 @@ exports.getUser = (req, res) => {
           console.log(Constants.HTTP_NOT_FOUND)
           res.status(Constants.HTTP_NOT_FOUND).send({ message: 'пользователь не найден' });
         } else {
-          res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере' });
+          res.status(Constants.HTTP_INTERNAL_SERVER_ERROR).send({ message: 'произошла ошибка на сервере1111' });
         }
       });
 }
