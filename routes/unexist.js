@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const unexist_controller = require("../controllers/unexist");
+const unexistController = require('../controllers/unexist');
 
-router.all("/*", unexist_controller.processUnexist);
+router.all('/*', unexistController.processUnexist);
 
 module.exports = router;
