@@ -1,7 +1,7 @@
-const router = require('express').Router();
+// const router = require('express').Router();
 
-const usersRouter = require("./users");
-const cardsRouter = require("./cards");
-const unexistRouter = require("./unexist");
+// const usersRouter = require("./users");
+// const cardsRouter = require("./cards");
+// const unexistRouter = require("./unexist");
 
-module.exports = router;
+// module.exports = router;
