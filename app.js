@@ -27,9 +27,6 @@ const unexistRouter = require('./routes/unexist');
 
 app.use('/', unexistRouter);
 
-// const mainRouter = require('./routes/index.js');
-// app.use('/', mainRouter);
-
 app.listen(PORT, () => {
   console.log('--------------------------');
   console.log('                          ');
