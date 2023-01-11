@@ -7,8 +7,6 @@ const { PORT = 3000, BASE_PATH } = process.env;
 const app = express();
 
 app.use(express.json())
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://127.0.0.1/mestodb');
 
@@ -20,16 +18,14 @@ app.use((req, res, next) => {
 });
 
 const usersRouter = require("./routes/users");
-app.use("/", usersRouter);
+app.use("/users", usersRouter);
 const cardsRouter = require("./routes/cards");
-app.use("/", cardsRouter);
+app.use("/cards", cardsRouter);
 const unexistRouter = require("./routes/unexist");
 app.use("/", unexistRouter);
 
-
-
-// app.use(express.static(path.join(__dirname, 'public')));
-
+// const mainRouter = require("./routes/index.js");
+// app.use("/", mainRouter);
 
 app.listen(PORT, () => {
   console.log('--------------------------');
@@ -37,5 +33,4 @@ app.listen(PORT, () => {
   console.log('SERVER HAS BEEN STARTED!!!');
   console.log('                          ');
   console.log('--------------------------');
-
 });

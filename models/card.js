@@ -16,24 +16,21 @@ const cardSchema = new mongoose.Schema({
   },
 
   owner: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     minlength: 2,
     maxlength: 30,
-  },
-
-  likes: {
-    type: Array,
-    // unique: true,
-    default: []
+    required: true,
+    ref: 'user',
   },
 
   likes: [{
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
   }],
 
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 
 });
