@@ -4,7 +4,7 @@ const Constants = require('../utils/constants');
 
 exports.getCards = (req, res) => {
   Card.find({})
-    .populate('owner')
+    .populate(['owner'])
     .populate('likes')
     .then((cards) => res.send(cards))
     .catch(() => {

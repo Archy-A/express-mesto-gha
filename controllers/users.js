@@ -3,7 +3,7 @@ const User = require('../models/user');
 const Constants = require('../utils/constants');
 
 exports.getUser = (req, res) => {
-  User.findById(req.params.id.trim())
+  User.findById(req.params.id)
     .then((user) => {
       if (user) {
         res.send({
@@ -66,11 +66,11 @@ exports.createUser = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  const me = req.user._id.trim();
+  const { name, about } = req.body;
+  const me = req.user._id;
   User.findByIdAndUpdate(
     me,
-    { name, about, avatar },
+    { name, about },
     {
       new: true,
       runValidators: true,
@@ -104,7 +104,7 @@ exports.updateUser = (req, res) => {
 };
 
 exports.updateAvaUser = (req, res) => {
-  const me = req.user._id.trim();
+  const me = req.user._id;
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     me,
