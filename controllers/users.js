@@ -51,23 +51,23 @@ exports.createUser = async (req, res, next) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (user) return res.status(400).send({ message: 'Уже есть такой пользователь!'});
-  bcrypt.hash(req.body.password, 10).then((hash) =>
-    User.create({
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => User.create({
       name: req.body.name,
       about: req.body.about,
       avatar: req.body.avatar,
       email: req.body.email,
       password: hash,
     })
-      .then((user) =>
-        res.send({
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          email: user.email,
-          _id: user._id,
-        }))
+      .then((userdata) => res.send({
+        name: userdata.name,
+        about: userdata.about,
+        avatar: userdata.avatar,
+        email: userdata.email,
+        _id: userdata._id,
+      }))
       .catch(next));
+  return null;
 };
 
 exports.updateUser = (req, res, next) => {
