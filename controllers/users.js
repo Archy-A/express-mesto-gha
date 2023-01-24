@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const User = require("../models/user");
-const Constants = require("../utils/constants");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const User = require('../models/user');
+const Constants = require('../utils/constants');
 
 const NotFoundError = require('../errors/not-found-err');
 
@@ -67,10 +66,8 @@ exports.createUser = async (req, res, next) => {
           avatar: user.avatar,
           email: user.email,
           _id: user._id,
-        })
-      )
-      .catch(next)
-  );
+        }))
+      .catch(next));
 };
 
 exports.updateUser = (req, res, next) => {
@@ -82,7 +79,7 @@ exports.updateUser = (req, res, next) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   )
     .then((user) => {
       if (user) {
@@ -111,7 +108,7 @@ exports.updateAvaUser = (req, res, next) => {
       new: true,
       runValidators: true,
       upsert: false,
-    }
+    },
   )
     .then((user) => {
       if (user) {
@@ -134,8 +131,8 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, "super-strong-secret", {
-        expiresIn: "7d",
+      const token = jwt.sign({ _id: user._id }, 'super-strong-secret', {
+        expiresIn: '7d',
       });
       res.send({ token });
     })

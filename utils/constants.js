@@ -4,6 +4,8 @@ module.exports = Object.freeze({
   HTTP_INTERNAL_SERVER_ERROR: '500',
   HTTP_NOT_FOUND: '404',
   JWT_PROBLEM: 'Некорректный JWT токен',
+  OWNER_WRONG: 'Вы не являетесь владельцем карточки',
+  CARD_NOT_EXIST: 'Нет такой карточки',
   USER_NOT_FOUND: 'Пользователь не найден',
   CARD_NOT_FOUND: 'Карточка не найдена',
   USER_BAD_DATA: 'Переданы некорректные данные в метод пользователя',
