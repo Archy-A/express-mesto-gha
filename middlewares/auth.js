@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
       .status(401)
       .send({ message: 'Необходима авторизация' });
   }
-  console.log('>>>>>>>>>>>>>>>>>> req.headers.authorization = ', req.headers.authorization)
+  console.log('>>>>>>>>>>>>>>>>>> req.headers.authorization = ', req.headers.authorization);
   const { authorization } = req.headers;
   const token = extractBearerToken(authorization);
   let payload;
