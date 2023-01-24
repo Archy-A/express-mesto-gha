@@ -11,10 +11,8 @@ module.exports = (req, res, next) => {
     return res
       .status(401)
       .send({ message: 'Необходима авторизация' });
-  } else {
-
+  }
   console.log('>>>>>>>>>>>>>>>>>> req.headers.authorization = ', req.headers.authorization)
-
   const { authorization } = req.headers;
   const token = extractBearerToken(authorization);
   let payload;
@@ -22,10 +20,10 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, 'super-strong-secret');
     req.user = payload;
     next();
-  // } catch (err) {
-  //   // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-  //   next(new JWTWrongError(Constants.JWT_PROBLEM));
-  // }
+    // } catch (err) {
+    //   // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    //   next(new JWTWrongError(Constants.JWT_PROBLEM));
+    // }
   } catch (err) {
     return res
       .status(401)
@@ -35,5 +33,3 @@ module.exports = (req, res, next) => {
   // next();
   return null;
 };
-}
-
