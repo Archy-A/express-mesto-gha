@@ -11,9 +11,6 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "plugins": [
-        "import"
-    ],
     "rules": {
       "no-underscore-dangle": ["error", { "allow": ["_id"] }]
     }

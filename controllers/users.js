@@ -1,8 +1,29 @@
-const mongoose = require('mongoose');
-const User = require('../models/user');
-const Constants = require('../utils/constants');
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const User = require("../models/user");
+const Constants = require("../utils/constants");
 
-exports.getUser = (req, res) => {
+const NotFoundError = require('../errors/not-found-err');
+
+exports.getMe = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (user) {
+        res.send({
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+        });
+      } else {
+        throw new NotFoundError(Constants.USER_NOT_FOUND);
+      }
+    })
+    .catch(next);
+};
+
+exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((user) => {
       if (user) {
@@ -13,59 +34,46 @@ exports.getUser = (req, res) => {
           _id: user._id,
         });
       } else {
-        res
-          .status(Constants.HTTP_NOT_FOUND)
-          .send({ message: Constants.USER_NOT_FOUND });
+        throw new NotFoundError(Constants.USER_NOT_FOUND);
       }
     })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.CastError) {
-        res.status(Constants.HTTP_BAD_REQUEST).send({
-          message: Constants.USER_BAD_DATA,
-        });
-      } else {
-        res
-          .status(Constants.HTTP_INTERNAL_SERVER_ERROR)
-          .send({ message: Constants.SERVER_ERROR });
-      }
-    });
+    .catch(next);
 };
 
-exports.getUsers = (req, res) => {
+exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.send(users);
     })
-    .catch(() => {
-      res
-        .status(Constants.HTTP_INTERNAL_SERVER_ERROR)
-        .send({ message: Constants.SERVER_ERROR });
-    });
+    .catch(next);
 };
 
-exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
-    .then((user) => res.send({
-      name: user.name,
-      about: user.about,
-      avatar: user.avatar,
-      _id: user._id,
-    }))
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        res.status(Constants.HTTP_BAD_REQUEST).send({
-          message: Constants.USER_CREATE_BAD_DATA,
-        });
-      } else {
-        res
-          .status(Constants.HTTP_INTERNAL_SERVER_ERROR)
-          .send({ message: Constants.SERVER_ERROR });
-      }
-    });
+exports.createUser = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) return res.status(400).send({ message: 'Уже есть такой пользователь!'});
+  bcrypt.hash(req.body.password, 10).then((hash) =>
+    User.create({
+      name: req.body.name,
+      about: req.body.about,
+      avatar: req.body.avatar,
+      email: req.body.email,
+      password: hash,
+    })
+      .then((user) =>
+        res.send({
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          email: user.email,
+          _id: user._id,
+        })
+      )
+      .catch(next)
+  );
 };
 
-exports.updateUser = (req, res) => {
+exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
   const me = req.user._id;
   User.findByIdAndUpdate(
@@ -74,7 +82,7 @@ exports.updateUser = (req, res) => {
     {
       new: true,
       runValidators: true,
-    },
+    }
   )
     .then((user) => {
       if (user) {
@@ -90,20 +98,10 @@ exports.updateUser = (req, res) => {
           .send({ message: Constants.USER_NOT_FOUND });
       }
     })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        res.status(Constants.HTTP_BAD_REQUEST).send({
-          message: Constants.USER_UPDATE_BAD_DATA,
-        });
-      } else {
-        res
-          .status(Constants.HTTP_INTERNAL_SERVER_ERROR)
-          .send({ message: Constants.SERVER_ERROR });
-      }
-    });
+    .catch(next);
 };
 
-exports.updateAvaUser = (req, res) => {
+exports.updateAvaUser = (req, res, next) => {
   const me = req.user._id;
   const { avatar } = req.body;
   User.findByIdAndUpdate(
@@ -113,7 +111,7 @@ exports.updateAvaUser = (req, res) => {
       new: true,
       runValidators: true,
       upsert: false,
-    },
+    }
   )
     .then((user) => {
       if (user) {
@@ -129,15 +127,17 @@ exports.updateAvaUser = (req, res) => {
           .send({ message: Constants.USER_NOT_FOUND });
       }
     })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        res.status(Constants.HTTP_BAD_REQUEST).send({
-          message: Constants.USER_AVA_BAD_DATA,
-        });
-      } else {
-        res
-          .status(Constants.HTTP_INTERNAL_SERVER_ERROR)
-          .send({ message: Constants.SERVER_ERROR });
-      }
-    });
+    .catch(next);
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, "super-strong-secret", {
+        expiresIn: "7d",
+      });
+      res.send({ token });
+    })
+    .catch(next);
 };
