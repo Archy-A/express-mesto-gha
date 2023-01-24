@@ -7,6 +7,14 @@ const extractBearerToken = function (header) {
 };
 
 module.exports = (req, res, next) => {
+  if (req.headers.authorization === undefined) {
+    return res
+      .status(401)
+      .send({ message: 'Необходима авторизация' });
+  } else {
+
+  console.log('>>>>>>>>>>>>>>>>>> req.headers.authorization = ', req.headers.authorization)
+
   const { authorization } = req.headers;
   const token = extractBearerToken(authorization);
   let payload;
@@ -15,7 +23,7 @@ module.exports = (req, res, next) => {
     req.user = payload;
     next();
   // } catch (err) {
-  //   console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+  //   // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
   //   next(new JWTWrongError(Constants.JWT_PROBLEM));
   // }
   } catch (err) {
@@ -27,3 +35,5 @@ module.exports = (req, res, next) => {
   // next();
   return null;
 };
+}
+
