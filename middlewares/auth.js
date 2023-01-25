@@ -20,10 +20,6 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, 'super-strong-secret');
     req.user = payload;
     next();
-    // } catch (err) {
-    //   // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-    //   next(new JWTWrongError(Constants.JWT_PROBLEM));
-    // }
   } catch (err) {
     return res
       .status(401)
