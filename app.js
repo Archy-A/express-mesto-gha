@@ -13,11 +13,13 @@ mongoose.connect('mongodb://127.0.0.1/mestodb');
 
 const signup = require('./routes/signup');
 
+const regexphhtp = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/;
+
 app.use('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string(),
+    avatar: Joi.string().min(2).pattern(regexphhtp),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8).max(30),
   }),

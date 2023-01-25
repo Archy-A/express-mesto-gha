@@ -50,7 +50,7 @@ exports.getUsers = (req, res, next) => {
 exports.createUser = async (req, res, next) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  if (user) return res.status(400).send({ message: 'Уже есть такой пользователь!' });
+  if (user) return res.status(409).send({ message: 'Уже есть такой пользователь!' });
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       name: req.body.name,
