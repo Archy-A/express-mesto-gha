@@ -24,7 +24,6 @@ exports.getMe = (req, res, next) => {
 
 exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> getUser')
     .then((user) => {
       if (user) {
         res.send({
