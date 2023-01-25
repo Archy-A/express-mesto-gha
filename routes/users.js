@@ -3,6 +3,7 @@ const usersController = require('../controllers/users');
 
 router.get('/', usersController.getUsers);
 router.get('/:id', usersController.getUser);
+router.get('/me', usersController.getMe);
 router.patch('/me', usersController.updateUser);
 router.patch('/me/avatar', usersController.updateAvaUser);
 router.patch('/:id', usersController.updateUser);

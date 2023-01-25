@@ -54,9 +54,9 @@ app.use('/users', celebrate({
   }),
 }), usersRouter);
 
-const meRouter = require('./routes/me');
+// const meRouter = require('./routes/me');
 
-app.use('/me', meRouter);
+// app.use('/me', meRouter);
 
 const cardsRouter = require('./routes/cards');
 
