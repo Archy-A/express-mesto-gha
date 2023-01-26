@@ -5,9 +5,8 @@ const usersController = require('../controllers/users');
 router.get('/me', usersController.getMe);
 router.get('/', usersController.getUsers);
 router.get('/:id', celebrate({
-  // валидируем параметры
   params: Joi.object().keys({
-    _id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+    id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
   })}),
 usersController.getUser);
 router.patch('/me', usersController.updateUser);

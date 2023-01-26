@@ -37,30 +37,24 @@ app.use('/signin', celebrate({
 app.use(auth);
 const usersRouter = require('./routes/users');
 
-app.use('/users',
-celebrate({
-//  params: Joi.string().hex(),
-  //params: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
-  // params: Joi.object().keys({
-  //   _id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
-  // }),
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
-    email: Joi.string().email(),
-    password: Joi.string().min(8).max(30),
+app.use(
+  '/users',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(30),
+      avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
+      email: Joi.string().email(),
+      password: Joi.string().min(8).max(30),
+    }),
   }),
-}),
-usersRouter);
-
-
+  usersRouter,
+);
 
 const cardsRouter = require('./routes/cards');
 app.use('/cards',
   celebrate({
     body: Joi.object().keys({
-      // .required()
       name: Joi.string().min(2).max(30),
       link: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     }),
