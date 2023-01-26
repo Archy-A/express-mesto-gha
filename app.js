@@ -58,12 +58,13 @@ usersRouter);
 
 const cardsRouter = require('./routes/cards');
 app.use('/cards',
-  // celebrate({
-  //   body: Joi.object().keys({
-  //     name: Joi.string().required().min(2).max(30),
-  //     link: Joi.string().required().min(2).pattern(Constants.REGEXPHTTP),
-  //   }),
-  // }),
+  celebrate({
+    body: Joi.object().keys({
+      // .required()
+      name: Joi.string().min(2).max(30),
+      link: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
+    }),
+  }),
   cardsRouter);
 
 
