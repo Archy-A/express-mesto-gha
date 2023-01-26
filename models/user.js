@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const isEmail = require('validator/lib/isEmail');
+const Constants = require('../utils/constants');
+const UserPassError = require('../errors/user-pass-err');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -46,25 +48,18 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.findUserByCredentials = function (email, password, next) {
   return this.findOne({ email }).select('+password')
-  .then((user) => {
-   if (!user) {
-      // return Promise.reject(new Error('Неправильные почта или пароль'));
-      throw new Error('Неправильные почта или пароль 1');
-   }
-
-  return bcrypt.compare(password, user.password)
-  .then((matched) => {
-     if (!matched) {
-      // return Promise.reject(new Error('Неправильные почта или пароль'));
-      throw new Error('Неправильные почта или пароль 2');
-     }
-      return user;
-    })
-  })
-
-// }).catch((err) => next(err))
-
-// }).catch((err) => next(err))
+    .then((user) => {
+      if (!user) {
+        throw new UserPassError(Constants.USER_PASS_WRONG);
+      }
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            throw new UserPassError(Constants.USER_PASS_WRONG);
+          }
+          return user;
+        }).catch(next);
+    }).catch(next);
 };
 
 module.exports = mongoose.model('user', userSchema);

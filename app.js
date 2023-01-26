@@ -45,6 +45,9 @@ app.use(auth);
 const usersRouter = require('./routes/users');
 
 app.use('/users', celebrate({
+  params: Joi.object().keys({
+    _id: Joi.string().min(24).max(24),
+  }),
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
@@ -68,13 +71,14 @@ app.use('/', unexistRouter);
 
 app.use(errors());
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
+  console.log('///////////////  ЗАШЛИ В ПОСЛЕДНИЙ ОБРАБОТЧИК ОШИБОК! ///////////////////////////////////////')
   const { statusCode = 500, message } = err;
   res
     .status(statusCode)
     .send({
       message: statusCode === 500
-        ? 'На сервере произошла какая-то ошибка, нипанятнааа..'
+        ? 'На сервере произошла какая-то ошибка, ...........................'
         : message,
     });
 });

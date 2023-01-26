@@ -6,6 +6,8 @@ module.exports = Object.freeze({
   JWT_PROBLEM: 'Некорректный JWT токен',
   OWNER_WRONG: 'Вы не являетесь владельцем карточки',
   CARD_NOT_EXIST: 'Нет такой карточки',
+  USER_PASS_WRONG: 'Неправильные почта или пароль!',
+  USER_ID_WRONG: 'Некорректный ID пользователя!',
   USER_NOT_FOUND: 'Пользователь не найден',
   CARD_NOT_FOUND: 'Карточка не найдена',
   USER_BAD_DATA: 'Переданы некорректные данные в метод пользователя',

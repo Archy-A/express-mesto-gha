@@ -23,20 +23,24 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.getUser = (req, res, next) => {
-  User.findById(req.params.id)
-    .then((user) => {
-      if (user) {
-        res.send({
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          _id: user._id,
-        });
-      } else {
-        throw new NotFoundError(Constants.USER_NOT_FOUND);
-      }
-    })
-    .catch(next);
+  if ((req.params.id).length !== 24) {
+    throw new NotFoundError(Constants.USER_ID_WRONG);
+  } else {
+    User.findById(req.params.id)
+      .then((user) => {
+        if (user) {
+          res.send({
+            name: user.name,
+            about: user.about,
+            avatar: user.avatar,
+            _id: user._id,
+          });
+        } else {
+          throw new NotFoundError(Constants.USER_NOT_FOUND);
+        }
+      })
+      .catch(next);
+  }
 };
 
 exports.getUsers = (req, res, next) => {
