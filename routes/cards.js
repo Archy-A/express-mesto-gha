@@ -4,7 +4,12 @@ const cardsController = require('../controllers/cards');
 const Constants = require('../utils/constants');
 
 router.get('/', cardsController.getCards);
-router.delete('/:id', cardsController.deleteCard);
+
+router.delete('/:id', celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+  }),
+}), cardsController.deleteCard);
 
 router.post('/', celebrate({
   body: Joi.object().keys({
