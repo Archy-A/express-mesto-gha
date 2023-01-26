@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-// const JWTWrongError = require('../errors/jwt-err');
-// const Constants = require('../utils/constants');
+const UserPassError = require('../errors/user-pass-err');
+const Constants = require('../utils/constants');
 
 const extractBearerToken = function (header) {
   return header.replace('Bearer ', '');
@@ -8,9 +8,7 @@ const extractBearerToken = function (header) {
 
 module.exports = (req, res, next) => {
   if (req.headers.authorization === undefined) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new UserPassError(Constants.JWT_PROBLEM);
   }
   const { authorization } = req.headers;
   const token = extractBearerToken(authorization);
@@ -19,12 +17,9 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, 'super-strong-secret');
     req.user = payload;
     next();
-  } catch (err) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+  } catch (e) {
+    const err = new UserPassError(Constants.JWT_PROBLEM);
+    next(err);
   }
-  // req.user = payload;
-  // next();
   return null;
 };
