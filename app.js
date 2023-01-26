@@ -40,8 +40,18 @@ app.use(auth);
 
 const usersRouter = require('./routes/users');
 
-app.use('/users', celebrate({
-  params: Joi.string().hex(),
+app.use('/users',
+
+celebrate({
+
+//  params: Joi.string().hex(),
+
+//  params: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+
+  // params: Joi.object().keys({
+  //   _id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+  // }),
+
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
@@ -49,7 +59,9 @@ app.use('/users', celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8).max(30),
   }),
-}), usersRouter);
+}),
+
+usersRouter);
 
 const cardsRouter = require('./routes/cards');
 
