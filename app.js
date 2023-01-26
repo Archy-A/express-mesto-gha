@@ -41,10 +41,7 @@ app.use(auth);
 const usersRouter = require('./routes/users');
 
 app.use('/users', celebrate({
-  params: Joi.object().keys({
-    // _id: Joi.string().min(24).max(24),
-    _id: Joi.string().hex(),
-  }),
+  params: Joi.string().hex(),
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
