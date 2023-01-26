@@ -65,7 +65,12 @@ usersRouter);
 
 const cardsRouter = require('./routes/cards');
 
-app.use('/cards', cardsRouter);
+app.use('/cards', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    link: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
+  }),
+}), cardsRouter);
 
 const unexistRouter = require('./routes/unexist');
 
