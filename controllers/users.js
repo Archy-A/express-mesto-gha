@@ -4,6 +4,7 @@ const User = require('../models/user');
 const Constants = require('../utils/constants');
 
 const NotFoundError = require('../errors/not-found-err');
+const UserIdError = require('../errors/user-id-err');
 
 exports.getMe = (req, res, next) => {
   User.findById(req.user._id)
@@ -24,7 +25,7 @@ exports.getMe = (req, res, next) => {
 
 exports.getUser = (req, res, next) => {
   if ((req.params.id).length !== 24) {
-    throw new NotFoundError(Constants.USER_ID_WRONG);
+    throw new UserIdError(Constants.USER_ID_WRONG);
   } else {
     User.findById(req.params.id)
       .then((user) => {
