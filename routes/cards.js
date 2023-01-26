@@ -10,16 +10,19 @@ router.post('/', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     link: Joi.string().required().min(2).pattern(Constants.REGEXPHTTP),
-  })}), cardsController.createCard);
+  }),
+}), cardsController.createCard);
 
 router.put('/:id/likes', celebrate({
   params: Joi.object().keys({
     id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
-  })}), cardsController.likeCard);
+  }),
+}), cardsController.likeCard);
 
 router.delete('/:id/likes', celebrate({
   params: Joi.object().keys({
     id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
-  })}), cardsController.dislikeCard);
+  }),
+}), cardsController.dislikeCard);
 
 module.exports = router;

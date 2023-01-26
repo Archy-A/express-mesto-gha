@@ -13,6 +13,7 @@ app.use(express.json());
 mongoose.connect('mongodb://127.0.0.1/mestodb');
 
 const signup = require('./routes/signup');
+
 app.use('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -24,6 +25,7 @@ app.use('/signup', celebrate({
 }), signup);
 
 const login = require('./routes/login');
+
 app.use('/signin', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -52,24 +54,24 @@ app.use(
 );
 
 const cardsRouter = require('./routes/cards');
-app.use('/cards',
+
+app.use(
+  '/cards',
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
       link: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     }),
   }),
-  cardsRouter);
-
-
+  cardsRouter,
+);
 
 const unexistRouter = require('./routes/unexist');
-app.use('/', unexistRouter);
 
+app.use('/', unexistRouter);
 
 app.use(errors());
 app.use((err, req, res, next) => {
-  console.log('///////////////  ЗАШЛИ В ПОСЛЕДНИЙ ОБРАБОТЧИК ОШИБОК! ///////////////////////////////////////')
   const { statusCode = 500, message } = err;
   res
     .status(statusCode)
@@ -78,6 +80,7 @@ app.use((err, req, res, next) => {
         ? 'На сервере произошла какая-то ошибка, ...........................'
         : message,
     });
+  next();
 });
 
 app.listen(PORT, () => {
