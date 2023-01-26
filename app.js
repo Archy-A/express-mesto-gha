@@ -40,32 +40,11 @@ app.use(auth);
 
 const usersRouter = require('./routes/users');
 
-app.use(
-  '/users',
-  // celebrate({
-  //   body: Joi.object().keys({
-  //     name: Joi.string().min(2).max(30),
-  //     about: Joi.string().min(2).max(30),
-  //     avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
-  //     email: Joi.string().email(),
-  //     password: Joi.string().min(8),
-  //   }),
-  // }),
-  usersRouter,
-);
+app.use('/users', usersRouter);
 
 const cardsRouter = require('./routes/cards');
 
-app.use(
-  '/cards',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      link: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
-    }),
-  }),
-  cardsRouter,
-);
+app.use('/cards', cardsRouter);
 
 const unexistRouter = require('./routes/unexist');
 
