@@ -40,7 +40,7 @@ const usersRouter = require('./routes/users');
 app.use('/users',
 celebrate({
 //  params: Joi.string().hex(),
-//  params: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+  //params: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
   // params: Joi.object().keys({
   //   _id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
   // }),
