@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
 const auth = require('./middlewares/auth');
+const Constants = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -13,14 +14,11 @@ mongoose.connect('mongodb://127.0.0.1/mestodb');
 
 const signup = require('./routes/signup');
 
-// https://ya.ru/av.bmp
-const regexphhtp = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._+~#=]{2,256}\/[-a-zA-Z0-9@:%._+~#=]{2,256}/;
-
 app.use('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().min(2).pattern(regexphhtp),
+    avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8).max(30),
   }).unknown(true),
@@ -28,13 +26,11 @@ app.use('/signup', celebrate({
 
 const login = require('./routes/login');
 
-// app.use('/signin', login);
-
 app.use('/signin', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().min(2).pattern(regexphhtp),
+    avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8).max(30),
   }),
@@ -46,20 +42,17 @@ const usersRouter = require('./routes/users');
 
 app.use('/users', celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().min(24).max(24),
+    // _id: Joi.string().min(24).max(24),
+    _id: Joi.string().hex(),
   }),
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().min(2).pattern(regexphhtp),
+    avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8).max(30),
   }),
 }), usersRouter);
-
-// const meRouter = require('./routes/me');
-
-// app.use('/me', meRouter);
 
 const cardsRouter = require('./routes/cards');
 
