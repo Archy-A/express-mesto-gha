@@ -12,7 +12,11 @@ router.post('/', celebrate({
     link: Joi.string().required().min(2).pattern(Constants.REGEXPHTTP),
   })}), cardsController.createCard);
 
-router.put('/:id/likes', cardsController.likeCard);
+router.put('/:id/likes', celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+  })}), cardsController.likeCard);
+
 router.delete('/:id/likes', cardsController.dislikeCard);
 
 module.exports = router;
