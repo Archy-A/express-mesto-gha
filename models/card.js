@@ -1,5 +1,6 @@
 // models/card.js
 const mongoose = require('mongoose');
+const Constants = require('../utils/constants');
 
 const cardSchema = new mongoose.Schema({
 
@@ -13,6 +14,10 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
+    validate: {
+      validator: (v) => Constants.REGEXPHTTP.test(v),
+      message: 'Неправильный формат ссылки',
+    },
   },
 
   owner: {
