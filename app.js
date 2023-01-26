@@ -20,7 +20,7 @@ app.use('/signup', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8).max(30),
+    password: Joi.string().required().min(8),
   }).unknown(true),
 }), signup);
 
@@ -32,7 +32,7 @@ app.use('/signin', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8).max(30),
+    password: Joi.string().required().min(8),
   }),
 }), login);
 
@@ -42,15 +42,15 @@ const usersRouter = require('./routes/users');
 
 app.use(
   '/users',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
-      avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
-      email: Joi.string().email(),
-      password: Joi.string().min(8).max(30),
-    }),
-  }),
+  // celebrate({
+  //   body: Joi.object().keys({
+  //     name: Joi.string().min(2).max(30),
+  //     about: Joi.string().min(2).max(30),
+  //     avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
+  //     email: Joi.string().email(),
+  //     password: Joi.string().min(8),
+  //   }),
+  // }),
   usersRouter,
 );
 
