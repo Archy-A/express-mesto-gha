@@ -13,7 +13,6 @@ app.use(express.json());
 mongoose.connect('mongodb://127.0.0.1/mestodb');
 
 const signup = require('./routes/signup');
-
 app.use('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -25,7 +24,6 @@ app.use('/signup', celebrate({
 }), signup);
 
 const login = require('./routes/login');
-
 app.use('/signin', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -37,21 +35,15 @@ app.use('/signin', celebrate({
 }), login);
 
 app.use(auth);
-
 const usersRouter = require('./routes/users');
 
 app.use('/users',
-
 celebrate({
-
 //  params: Joi.string().hex(),
-
 //  params: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
-
   // params: Joi.object().keys({
   //   _id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
   // }),
-
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
@@ -60,24 +52,27 @@ celebrate({
     password: Joi.string().min(8).max(30),
   }),
 }),
-
 usersRouter);
 
-const cardsRouter = require('./routes/cards');
 
-app.use('/cards', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().min(2).pattern(Constants.REGEXPHTTP),
-  }),
-}), cardsRouter);
+
+const cardsRouter = require('./routes/cards');
+app.use('/cards',
+  // celebrate({
+  //   body: Joi.object().keys({
+  //     name: Joi.string().required().min(2).max(30),
+  //     link: Joi.string().required().min(2).pattern(Constants.REGEXPHTTP),
+  //   }),
+  // }),
+  cardsRouter);
+
+
 
 const unexistRouter = require('./routes/unexist');
-
 app.use('/', unexistRouter);
 
-app.use(errors());
 
+app.use(errors());
 app.use((err, req, res, next) => {
   console.log('///////////////  ЗАШЛИ В ПОСЛЕДНИЙ ОБРАБОТЧИК ОШИБОК! ///////////////////////////////////////')
   const { statusCode = 500, message } = err;
