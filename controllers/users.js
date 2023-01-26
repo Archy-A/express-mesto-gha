@@ -13,6 +13,7 @@ exports.getMe = (req, res, next) => {
         res.send({
           name: user.name,
           about: user.about,
+          email: user.email,
           avatar: user.avatar,
           _id: user._id,
         });
