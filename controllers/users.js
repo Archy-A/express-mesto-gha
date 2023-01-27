@@ -5,6 +5,7 @@ const Constants = require('../utils/constants');
 
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/user-id-err');
+const UserExistError = require('../errors/user-exist-err');
 
 exports.getMe = (req, res, next) => {
   User.findById(req.user._id)
@@ -74,7 +75,7 @@ exports.createUser = async (req, res, next) => {
       .catch(next))
     .catch((e) => {
       if (e.code === 11000) {
-        const err = new BadRequestError(Constants.USER_EXIST);
+        const err = new UserExistError(Constants.USER_EXIST);
         next(err);
       }
 
