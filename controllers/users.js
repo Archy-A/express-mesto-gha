@@ -82,8 +82,9 @@ exports.createUser = async (req, res, next) => {
       if (e.name === 'CastError') {
         const err = new BadRequestError(Constants.USER_ID_WRONG);
         next(err);
+      } else {
+        next(e);
       }
-      next(e);
     });
   return null;
 };
