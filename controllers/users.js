@@ -25,24 +25,26 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.getUser = (req, res, next) => {
-  if ((req.params.id).length !== 24) {
-    throw new BadRequestError(Constants.USER_ID_WRONG);
-  } else {
-    User.findById(req.params.id)
-      .then((user) => {
-        if (user) {
-          res.send({
-            name: user.name,
-            about: user.about,
-            avatar: user.avatar,
-            _id: user._id,
-          });
-        } else {
-          throw new NotFoundError(Constants.USER_NOT_FOUND);
-        }
-      })
-      .catch(next);
-  }
+  User.findById(req.params.id)
+    .then((user) => {
+      if (user) {
+        res.send({
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+        });
+      } else {
+        throw new NotFoundError(Constants.USER_NOT_FOUND);
+      }
+    })
+    .catch((e) => {
+      if (e.name === 'CastError') {
+        const err = new BadRequestError(Constants.USER_ID_WRONG);
+        next(err);
+      }
+      next(e);
+    });
 };
 
 exports.getUsers = (req, res, next) => {
@@ -54,9 +56,9 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.createUser = async (req, res, next) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (user) return res.status(409).send({ message: 'Уже есть такой пользователь!' });
+  // const { email } = req.body;
+  // const user = await User.findOne({ email });
+  // if (user) return res.status(409).send({ message: 'Уже есть такой пользователь!' });
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       name: req.body.name,

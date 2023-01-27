@@ -4,13 +4,18 @@ const usersController = require('../controllers/users');
 const Constants = require('../utils/constants');
 
 router.get('/me', usersController.getMe);
+
 router.get('/', usersController.getUsers);
 
-router.get('/:id', celebrate({
-  params: Joi.object().keys({
-    id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+router.get(
+  '/:id',
+  celebrate({
+    params: Joi.object().keys({
+      id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+    }),
   }),
-}), usersController.getUser);
+  usersController.getUser,
+);
 
 router.patch('/me', celebrate({
   body: Joi.object().keys({

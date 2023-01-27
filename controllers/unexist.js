@@ -1,5 +1,7 @@
 const Constants = require('../utils/constants');
+const NotFoundError = require('../errors/not-found-err');
 
-exports.processUnexist = (req, res) => {
-  res.status(Constants.HTTP_NOT_FOUND).send({ message: Constants.PAGE_NOT_FOUND });
+exports.processUnexist = (req, res, next) => {
+  const err = new NotFoundError(Constants.PAGE_NOT_FOUND);
+  next(err);
 };
