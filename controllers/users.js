@@ -71,14 +71,12 @@ exports.createUser = async (req, res, next) => {
         avatar: userdata.avatar,
         email: userdata.email,
         _id: userdata._id,
-      }))
-      .catch(next))
+      })))
     .catch((e) => {
       if (e.code === 11000) {
         const err = new UserExistError(Constants.USER_EXIST);
         next(err);
       }
-
       if (e.name === 'CastError') {
         const err = new BadRequestError(Constants.USER_ID_WRONG);
         next(err);

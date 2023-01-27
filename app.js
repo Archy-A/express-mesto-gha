@@ -10,7 +10,7 @@ const app = express();
 
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1/mestodb');
+mongoose.connect('mongodb://127.0.0.1/mestodb2');
 
 const signup = require('./routes/signup');
 
