@@ -52,6 +52,7 @@ app.use('/', unexistRouter);
 
 app.use(errors());
 app.use((err, req, res, next) => {
+  console.log('error = ', err);
   const { statusCode = 500, message } = err;
   res
     .status(statusCode)

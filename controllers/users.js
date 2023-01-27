@@ -56,9 +56,6 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.createUser = async (req, res, next) => {
-  // const { email } = req.body;
-  // const user = await User.findOne({ email });
-  // if (user) return res.status(409).send({ message: 'Уже есть такой пользователь!' });
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       name: req.body.name,
@@ -74,7 +71,19 @@ exports.createUser = async (req, res, next) => {
         email: userdata.email,
         _id: userdata._id,
       }))
-      .catch(next));
+      .catch(next))
+    .catch((e) => {
+      if (e.code === 11000) {
+        const err = new BadRequestError(Constants.USER_EXIST);
+        next(err);
+      }
+
+      if (e.name === 'CastError') {
+        const err = new BadRequestError(Constants.USER_ID_WRONG);
+        next(err);
+      }
+      next(e);
+    });
   return null;
 };
 
@@ -98,12 +107,16 @@ exports.updateUser = (req, res, next) => {
           _id: user._id,
         });
       } else {
-        res
-          .status(Constants.HTTP_NOT_FOUND)
-          .send({ message: Constants.USER_NOT_FOUND });
+        next(new NotFoundError(Constants.HTTP_NOT_FOUND));
       }
     })
-    .catch(next);
+    .catch((e) => {
+      if (e.name === 'ValidationError') {
+        const err = new BadRequestError(Constants.HTTP_BAD_REQUEST);
+        next(err);
+      }
+      next(e);
+    });
 };
 
 exports.updateAvaUser = (req, res, next) => {
@@ -127,12 +140,16 @@ exports.updateAvaUser = (req, res, next) => {
           _id: user._id,
         });
       } else {
-        res
-          .status(Constants.HTTP_NOT_FOUND)
-          .send({ message: Constants.USER_NOT_FOUND });
+        next(new NotFoundError(Constants.USER_NOT_FOUND));
       }
     })
-    .catch(next);
+    .catch((e) => {
+      if (e.name === 'ValidationError') {
+        const err = new BadRequestError(Constants.HTTP_BAD_REQUEST);
+        next(err);
+      }
+      next(e);
+    });
 };
 
 module.exports.login = (req, res, next) => {
