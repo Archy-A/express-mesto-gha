@@ -20,7 +20,7 @@ app.use('/signup', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required()
   }).unknown(true),
 }), signup);
 
@@ -32,7 +32,7 @@ app.use('/signin', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().min(2).pattern(Constants.REGEXPHTTP),
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required()
   }),
 }), login);
 
