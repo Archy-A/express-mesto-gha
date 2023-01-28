@@ -41,10 +41,10 @@ exports.getUser = (req, res, next) => {
     })
     .catch((e) => {
       if (e.name === 'CastError') {
-        const err = new BadRequestError(Constants.USER_ID_WRONG);
-        next(err);
+        next(new BadRequestError(Constants.USER_ID_WRONG));
+      } else {
+        next(e);
       }
-      next(e);
     });
 };
 
@@ -74,12 +74,9 @@ exports.createUser = async (req, res, next) => {
       })))
     .catch((e) => {
       if (e.code === 11000) {
-        const err = new UserExistError(Constants.USER_EXIST);
-        next(err);
-      }
-      if (e.name === 'CastError') {
-        const err = new BadRequestError(Constants.USER_ID_WRONG);
-        next(err);
+        next(new UserExistError(Constants.USER_EXIST));
+      } else if (e.name === 'CastError') {
+        next(new BadRequestError(Constants.USER_ID_WRONG));
       } else {
         next(e);
       }
@@ -112,10 +109,10 @@ exports.updateUser = (req, res, next) => {
     })
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        const err = new BadRequestError(Constants.HTTP_BAD_REQUEST);
-        next(err);
+        next(new BadRequestError(Constants.HTTP_BAD_REQUEST));
+      } else {
+        next(e);
       }
-      next(e);
     });
 };
 
@@ -145,10 +142,10 @@ exports.updateAvaUser = (req, res, next) => {
     })
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        const err = new BadRequestError(Constants.HTTP_BAD_REQUEST);
-        next(err);
+        next(new BadRequestError(Constants.HTTP_BAD_REQUEST));
+      } else {
+        next(e);
       }
-      next(e);
     });
 };
 

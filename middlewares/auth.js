@@ -18,8 +18,7 @@ module.exports = (req, res, next) => {
     req.user = payload;
     next();
   } catch (e) {
-    const err = new UserPassError(Constants.JWT_PROBLEM);
-    next(err);
+    next(new UserPassError(Constants.JWT_PROBLEM));
   }
   return null;
 };

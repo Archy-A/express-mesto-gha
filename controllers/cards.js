@@ -24,10 +24,10 @@ exports.createCard = (req, res, next) => {
     })
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        const err = new BadRequestError(Constants.HTTP_BAD_REQUEST);
-        next(err);
+        next(new BadRequestError(Constants.HTTP_BAD_REQUEST));
+      } else {
+        next(e);
       }
-      next(e);
     });
 };
 
@@ -51,10 +51,10 @@ exports.deleteCard = async (req, res, next) => {
     }
   } catch (e) {
     if (e.name === 'CastError') {
-      const err = new BadRequestError(Constants.HTTP_BAD_REQUEST);
-      next(err);
+      next(new BadRequestError(Constants.HTTP_BAD_REQUEST));
+    } else {
+      next(e);
     }
-    next(e);
   }
 };
 
@@ -79,10 +79,10 @@ exports.likeCard = (req, res, next) => {
     })
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        const err = new BadRequestError(Constants.HTTP_BAD_REQUEST);
-        next(err);
+        next(new BadRequestError(Constants.HTTP_BAD_REQUEST));
+      } else {
+        next(e);
       }
-      next(e);
     });
 };
 
@@ -107,9 +107,9 @@ exports.dislikeCard = (req, res, next) => {
     })
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        const err = new BadRequestError(Constants.HTTP_BAD_REQUEST);
-        next(err);
+        next(new BadRequestError(Constants.HTTP_BAD_REQUEST));
+      } else {
+        next(e);
       }
-      next(e);
     });
 };
